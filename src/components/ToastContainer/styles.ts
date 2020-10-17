@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  height: 200px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 30px;
+  overflow: hidden;
 `;
-
-export const Toast = styled.div``;

@@ -20,7 +20,6 @@ interface AuthState {
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-// eslint-disable-next-line react/prop-types
 const AuthProvider: React.FunctionComponent = ({ children }) => {
   const [data, setData] = useState(() => {
     const token = localStorage.getItem('@GoBarber: token');
