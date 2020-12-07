@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
@@ -28,6 +28,7 @@ const SignIn: React.FunctionComponent = () => {
 
   const { signIn } = useAuth();
   const { addToast } = useToast();
+  const history = useHistory();
 
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
@@ -47,21 +48,25 @@ const SignIn: React.FunctionComponent = () => {
           email: data.email,
           password: data.password,
         });
+
+        history.push('/dashboard');
       } catch (err) {
-        const errors = getValidationErrors(err);
-        formRef.current?.setErrors(errors);
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+          formRef.current?.setErrors(errors);
 
-        return;
+          return;
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação',
+          description:
+            'Ocorreu um erro durante a autenticação, cheque suas credenciais.',
+        });
       }
-
-      addToast({
-        type: 'error',
-        title: 'Erro na autenticação',
-        description:
-          'Ocorreu um erro durante a autenticação, cheque suas credenciais.',
-      });
     },
-    [signIn, addToast]
+    [signIn, history, addToast]
   );
 
   return (
